@@ -65,6 +65,16 @@ const NoteTake = () => {
     allNotes.filter(note => note.title.toLowerCase().includes(searching.toLowerCase()))
   );
 
+  useEffect(() => {
+    // Update current page if the search results don't fit the current page
+    const totalPages = Math.ceil(filteredNotes.length / notesPerPage);
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    } else if (filteredNotes.length === 0) {
+      setCurrentPage(1); 
+    }
+  }, [searching, filteredNotes]);
+
   const indexOfLastNote = currentPage * notesPerPage;
   const indexOfFirstNote = indexOfLastNote - notesPerPage;
   const currentNotes = filteredNotes.slice(indexOfFirstNote, indexOfLastNote);
